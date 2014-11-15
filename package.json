@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "description": "Function overloading for Node.js",
   "main": "lib/uber.js",
+  "scripts": {
+    "test": "mocha test"
+  },
   "dependencies": {
     "lodash": "^2.4.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
