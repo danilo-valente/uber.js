@@ -1,9 +1,16 @@
 var expect = require('expect.js');
-var uber = require('..');
 
 /*
  * Utils
  */
+var uberPath = require.resolve('../lib/uber.js');
+var uberTypesPath = require.resolve('../lib/types.js');
+var requireUber = function () {
+    delete require.cache[uberPath];
+    delete require.cache[uberTypesPath];
+    return require(uberPath);
+};
+
 var ArrayLike = function () {
     Array.apply(this, arguments);
 };
@@ -17,6 +24,7 @@ ArrayLike.prototype.constructor = ArrayLike;
 describe('uber', function () {
 
     describe('single primitive types', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             ['bool', function () {
@@ -135,6 +143,7 @@ describe('uber', function () {
     });
 
     describe('combined primitive types', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             ['string', 'int', function () {
@@ -176,6 +185,7 @@ describe('uber', function () {
     });
 
     describe('special types', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             ['null', function () {
@@ -239,6 +249,7 @@ describe('uber', function () {
     });
 
     describe('class types', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             [String.prototype, function () {
@@ -281,6 +292,7 @@ describe('uber', function () {
     });
 
     describe('custom type definitions', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             [function (arg) {
@@ -307,6 +319,7 @@ describe('uber', function () {
     });
 
     describe('custom error handler', function () {
+        var uber = requireUber();
 
         var sampleFn = uber([
             ['int', function () {
@@ -324,6 +337,7 @@ describe('uber', function () {
     });
 
     describe('defined from plain object', function () {
+        var uber = requireUber();
 
         var sampleFn = uber({
             'int,string': function () {
@@ -351,6 +365,7 @@ describe('uber', function () {
     });
 
     describe('custom type definitions registration', function () {
+        var uber = requireUber();
 
         uber.registerType('ArrayLike', function (arg) {
             return arg instanceof Array;
