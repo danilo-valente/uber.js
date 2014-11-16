@@ -33,6 +33,9 @@ describe('uber', function () {
             ['regex', function () {
                 return 'regex';
             }],
+            ['function', function () {
+                return 'function';
+            }],
             [function () {
                 return '';
             }],
@@ -103,6 +106,10 @@ describe('uber', function () {
 
         it('should return `\'regex\'` when called with `new RegExp(\'^\')`', function () {
             expect(sampleFn(new RegExp('^'))).to.equal('regex');
+        });
+
+        it('should return `\'function\'` when called with `function () {}`', function () {
+            expect(sampleFn(function () {})).to.equal('function');
         });
 
         it('should return `\'\'` when called with no arguments at all', function () {
