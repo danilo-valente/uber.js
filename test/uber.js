@@ -1,6 +1,19 @@
 var expect = require('expect.js');
 var uber = require('..');
 
+/*
+ * Utils
+ */
+var ArrayLike = function () {
+    Array.apply(this, arguments);
+};
+
+ArrayLike.prototype = new Array();
+ArrayLike.prototype.constructor = ArrayLike;
+
+/*
+ * Unit tests
+ */
 describe('uber', function () {
 
     describe('single primitive types', function () {
@@ -227,13 +240,6 @@ describe('uber', function () {
 
     describe('class types', function () {
 
-        var ArrayLike = function () {
-            Array.apply(this, arguments);
-        };
-
-        ArrayLike.prototype = new Array();
-        ArrayLike.prototype.constructor = ArrayLike;
-
         var sampleFn = uber([
             [String.prototype, function () {
                 return 'String';
@@ -275,13 +281,6 @@ describe('uber', function () {
     });
 
     describe('custom type definitions', function () {
-
-        var ArrayLike = function () {
-            Array.apply(this, arguments);
-        };
-
-        ArrayLike.prototype = new Array();
-        ArrayLike.prototype.constructor = ArrayLike;
 
         var sampleFn = uber([
             [function (arg) {
@@ -348,6 +347,27 @@ describe('uber', function () {
 
         it('should return `\'\'`', function () {
             expect(sampleFn()).to.equal('');
+        });
+    });
+
+    describe('custom type definitions registration', function () {
+
+        uber.registerType('ArrayLike', function (arg) {
+            return arg instanceof Array;
+        });
+
+        var sampleFn = uber([
+            ['ArrayLike', function () {
+                return 'array';
+            }]
+        ]);
+
+        it('should return `\'array\'`', function () {
+            expect(sampleFn([1, 2, 3])).to.equal('array');
+        });
+
+        it('should return `\'array\'`', function () {
+            expect(sampleFn(new ArrayLike(10))).to.equal('array');
         });
     });
 
