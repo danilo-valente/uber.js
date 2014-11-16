@@ -296,4 +296,31 @@ describe('uber', function () {
         });
     });
 
+    describe('defined from plain object', function () {
+
+        var sampleFn = uber({
+            'int,string': function () {
+                return 'int-string';
+            },
+            'bool,...': function () {
+                return 'bool-...';
+            },
+            '': function () {
+                return '';
+            }
+        });
+
+        it('should return `\'int-string\'`', function () {
+            expect(sampleFn(123, 'foo')).to.equal('int-string');
+        });
+
+        it('should return `\'bool-...\'`', function () {
+            expect(sampleFn(false, 1, 2, 3)).to.equal('bool-...');
+        });
+
+        it('should return `\'\'`', function () {
+            expect(sampleFn()).to.equal('');
+        });
+    });
+
 });
