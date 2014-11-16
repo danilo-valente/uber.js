@@ -386,4 +386,33 @@ describe('uber', function () {
         });
     });
 
+    describe('functions as instance methods', function () {
+        var uber = requireUber();
+
+        var Person = function (name) {
+            this.name = name;
+        };
+
+        Person.prototype.walk = uber([
+            ['real', function (distance) {
+                return this.name + ' is walking ' + distance + ' meters';
+            }]
+        ]);
+
+        var walter = new Person('Walter White');
+        walter.sayMyName = uber(['string', function (aka) {
+            if (this.name === 'Walter White' && aka === 'Heisenberg') {
+                return 'You\'re god damn right!';
+            }
+        }], walter);
+
+        it('should say Walter\'s name', function () {
+            expect(walter.sayMyName('Heisenberg')).to.equal('You\'re god damn right!');
+        });
+
+        it('should walk 10 meters', function () {
+            expect(walter.walk(10)).to.equal('Walter White is walking 10 meters');
+        });
+    });
+
 });
