@@ -206,8 +206,4 @@ describe('uber', function () {
         });
     });
 
-    describe('type validators', function () {
-        // TODO
-    });
-
 });
