@@ -165,6 +165,12 @@ describe('uber', function () {
     describe('special types', function () {
 
         var sampleFn = uber([
+            ['null', function () {
+                return 'null';
+            }],
+            ['undefined', function () {
+                return 'undefined';
+            }],
             ['*', function () {
                 return '*';
             }],
@@ -176,8 +182,23 @@ describe('uber', function () {
             }],
             ['bool', 'bool', '...', function () {
                 return 'bool-bool-...';
+            }],
+            [function () {
+                return '';
             }]
         ]);
+
+        it('should return `\'\'`', function () {
+            expect(sampleFn()).to.equal('');
+        });
+
+        it('should return `\'undefined\'`', function () {
+            expect(sampleFn(undefined)).to.equal('undefined');
+        });
+
+        it('should return `\'null\'`', function () {
+            expect(sampleFn(null)).to.equal('null');
+        });
 
         it('should return `\'*\'`', function () {
             expect(sampleFn('')).to.equal('*');
