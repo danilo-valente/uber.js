@@ -122,6 +122,15 @@ describe('uber', function () {
             }],
             ['string', 'string', function () {
                 return 'string-string';
+            }],
+            ['bool', 'string', 'number', function () {
+                return 'bool-string-number';
+            }],
+            ['int', 'real', 'number', function () {
+                return 'int-real-number';
+            }],
+            ['array', 'plain', 'date', 'regex', function () {
+                return 'array-plain-date-regex';
             }]
         ]);
 
@@ -133,7 +142,17 @@ describe('uber', function () {
             expect(sampleFn('foo', 1)).to.equal('string-int');
         });
 
-        // TODO: Add more unit tests
+        it('should return `\'bool-string-number\'`', function () {
+            expect(sampleFn(true, 'foo', NaN)).to.equal('bool-string-number');
+        });
+
+        it('should return `\'int-real-number\'`', function () {
+            expect(sampleFn(1, Math.PI, -Infinity)).to.equal('int-real-number');
+        });
+
+        it('should return `\'array-plain-date-regex\'`', function () {
+            expect(sampleFn([], {}, new Date(), /^/)).to.equal('array-plain-date-regex');
+        });
     });
 
     describe('special types', function () {
@@ -180,12 +199,25 @@ describe('uber', function () {
 
     describe('class types', function () {
 
+        var ArrayLike = function () {
+            Array.apply(this, arguments);
+        };
+
+        ArrayLike.prototype = new Array();
+        ArrayLike.prototype.constructor = ArrayLike;
+
         var sampleFn = uber([
             [String.prototype, function () {
                 return 'String';
             }],
             [Number.prototype, function () {
                 return 'Number';
+            }],
+            [Array.prototype, function () {
+                return 'Array';
+            }],
+            [ArrayLike.prototype, function () {
+                return 'ArrayLike';
             }]
         ]);
 
@@ -203,6 +235,64 @@ describe('uber', function () {
 
         it('should return `\'Number\'`', function () {
             expect(sampleFn(new Number(123))).to.equal('Number');
+        });
+
+        it('should return `\'Array\'`', function () {
+            expect(sampleFn([1, 2, 3])).to.equal('Array');
+        });
+
+        it('should return `\'ArrayLike\'`', function () {
+            expect(sampleFn(new ArrayLike(10))).to.equal('ArrayLike');
+        });
+    });
+
+    describe('custom type definitions', function () {
+
+        var ArrayLike = function () {
+            Array.apply(this, arguments);
+        };
+
+        ArrayLike.prototype = new Array();
+        ArrayLike.prototype.constructor = ArrayLike;
+
+        var sampleFn = uber([
+            [function (arg) {
+                return arg instanceof Array;
+            }, function () {
+                return 'Array instance';
+            }],
+            [Boolean.prototype, function () {
+                return 'Boolean';
+            }]
+        ]);
+
+        it('should return `\'Array instance\'`', function () {
+            expect(sampleFn([1, 2, 3])).to.equal('Array instance');
+        });
+
+        it('should return `\'Array instance\'`', function () {
+            expect(sampleFn(new ArrayLike(10))).to.equal('Array instance');
+        });
+
+        it('should return `\'Boolean\'`', function () {
+            expect(sampleFn(false)).to.equal('Boolean');
+        });
+    });
+
+    describe('custom error handler', function () {
+
+        var sampleFn = uber([
+            ['int', function () {
+                return 'int';
+            }],
+            function () {
+                console.log('Could not match implementation for given arguments', arguments);
+                return 'ok';
+            }
+        ]);
+
+        it('should handle errors instead of throwing them', function () {
+            expect(sampleFn()).to.equal('ok');
         });
     });
 
