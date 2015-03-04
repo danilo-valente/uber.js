@@ -232,6 +232,27 @@ Also notice that Uber splits those keys and commas (`,`) are delimiters and they
 so all whitespaces are kept. Thus, `'bool, int'` is **NOT** the same as `'bool,int'` since they are
 respectively parsed into `['bool', 'int']` and `['bool', ' int']`.
 
+## `uber.def`
+
+You can also can `uber.def` instead of `uber`. This way you should pass each argument as a function
+signature, which means that this code:
+
+```js
+uber([
+    ['int', function (n) {}],
+    ['string', function (str) {}]
+]);
+```
+
+Is the same as this one:
+
+```js
+uber.def(['int', function (n) {}],
+         ['string', function (str) {}]);
+```
+
+**Note:** This method does not support the `context` argument.
+
 ## List of supported argument types
 
 Type      | Matches              | Number of matches

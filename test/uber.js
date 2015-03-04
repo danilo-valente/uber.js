@@ -415,4 +415,23 @@ describe('uber', function () {
         });
     });
 
+    describe('.def', function () {
+        var uber = requireUber();
+
+        var sampleFn = uber.def(
+            ['int', function () {
+                return 'int';
+            }], ['string', function () {
+                return 'string';
+            }]);
+
+        it('should return `\'string\'`', function () {
+            expect(sampleFn('foo')).to.equal('string');
+        });
+
+        it('should return `\'int\'`', function () {
+            expect(sampleFn(123)).to.equal('int');
+        });
+    });
+
 });
