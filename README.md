@@ -16,7 +16,7 @@ npm install uber
 First of all, you need to `require` Uber:
 
 ```js
-var uber = require('uber');
+var uber = require('uber.js');
 ```
 
 Now you just have to replace your long function implementations with lots of arguments
