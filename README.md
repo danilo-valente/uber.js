@@ -8,7 +8,7 @@ Uber is a function overloading tool for Node.js.
 Install Uber with npm by running
  
 ```sh
-npm install uber
+npm install uber.js
 ```
 
 ## Basic Usage
